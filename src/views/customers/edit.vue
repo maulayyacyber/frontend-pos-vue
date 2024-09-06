@@ -1,0 +1,163 @@
+<script setup>
+// Import defineProps
+import { defineProps } from 'vue';
+
+// Menerima prop 'fetchData' dari komponen induk
+const props = defineProps({
+    fetchData: Function,
+    customerId: Number
+});
+
+// Import ref
+import { ref, onMounted } from 'vue';
+
+// Import services api
+import Api from '../../services/api';
+
+// Import js-cookie
+import Cookies from 'js-cookie';
+
+//import toastify
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+//import handleErrors
+import { handleErrors } from '../../utils/handleErrors';
+
+// Reactive state
+const name = ref('');
+const noTelp = ref('');
+const address = ref('');
+
+//ref error state & modal
+const errors = ref({});
+const modalRef = ref(null);
+
+//token
+const token = Cookies.get('token');
+
+//fetch customer
+const fetchCustomer = async () => {
+    if (props.customerId) {
+
+        try {
+            Api.defaults.headers.common['Authorization'] = token;
+            const response = await Api.get(`/api/customers/${props.customerId}`);
+
+            //assign response to state
+            const customer = response.data.data;
+            name.value = customer.name;
+            noTelp.value = customer.no_telp;
+            address.value = customer.address;
+
+        } catch (error) {
+            console.error('There was an error fetching the customer data!', error);
+        }
+    }
+};
+
+//onMounted
+onMounted(() => {
+    fetchCustomer();
+});
+
+//update customer
+const updateCustomer = async () => {
+    Api.defaults.headers.common['Authorization'] = token;
+
+    await Api.put(`/api/customers/${props.customerId}`, {
+        name: name.value,
+        no_telp: noTelp.value,
+        address: address.value,
+    })
+        .then((response) => {
+
+            //show toast
+            toast(`${response.data.meta.message}`, {
+                type: "success",
+                dangerouslyHTMLString: true,
+            });
+
+            //call fetchData
+            props.fetchData();
+
+            //close modal
+            const modalElement = modalRef.value;
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance.hide();
+
+        })
+        .catch((error) => {
+            handleErrors(error.response.data, errors);
+        });
+};
+</script>
+
+<template>
+
+    <a href="#" class="btn rounded" data-bs-toggle="modal" :data-bs-target="`#modal-edit-customer-${props.customerId}`">
+        Edit
+    </a>
+
+    <div class="modal modal-blur fade" :id="`modal-edit-customer-${props.customerId}`" tabindex="-1" role="dialog"
+        aria-hidden="true" ref="modalRef">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <form @submit.prevent="updateCustomer">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Customer</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Customer Name</label>
+                                    <input type="text" class="form-control" v-model="name"
+                                        placeholder="Enter Customer Name" />
+                                    <div v-if="errors.name" class="alert alert-danger mt-2">
+                                        {{ errors.name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <label class="form-label">No. Telp</label>
+                                    <input type="text" class="form-control" v-model="noTelp"
+                                        placeholder="Enter No. Telp" />
+                                    <div v-if="errors.no_telp" class="alert alert-danger mt-2">
+                                        {{ errors.no_telp }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" rows="3" v-model="address"
+                                        placeholder="Enter Address"></textarea>
+                                    <div v-if="errors.address" class="alert alert-danger mt-2">
+                                        {{ errors.address }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn me-auto rounded" data-bs-dismiss="modal">Cancel</a>
+                        <button type="submit" class="btn btn-primary ms-auto rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 5l0 14" />
+                                <path d="M5 12l14 0" />
+                            </svg>
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</template>

@@ -12,6 +12,10 @@ import { createPinia } from 'pinia'
 //initialize pinia
 const pinia = createPinia()
 
+// import vue-awesome-paginate
+import VueAwesomePaginate from "vue-awesome-paginate";
+import "vue-awesome-paginate/dist/style.css";
+
 //initialize vue
 const app = createApp(App)
 
@@ -20,6 +24,9 @@ app.use(router)
 
 //use pinia on vue
 app.use(pinia)
+
+//use vue-awesome-paginate
+app.use(VueAwesomePaginate);
 
 //mount root app element
 app.mount('#app')

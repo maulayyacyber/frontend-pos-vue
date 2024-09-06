@@ -7,7 +7,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 //import store
-import { useUser } from '../../stores/auth';
+import { useUser } from '../../stores/user';
 
 //import handleErrors
 import { handleErrors } from "../../utils/handleErrors";
@@ -19,7 +19,7 @@ import LayoutAuth from '../../layouts/auth.vue';
 const router = useRouter();
 
 //destruct store action login
-const { login } = useUser();
+const userStore = useUser();
 
 //define state
 const email = ref("");
@@ -32,7 +32,7 @@ const loginHandler = async () => {
     try {
 
         //call action login from store
-        await login({ email: email.value, password: password.value });
+        await userStore.login({ email: email.value, password: password.value });
 
         //redirect to dashboard
         router.push('/dashboard');
@@ -54,8 +54,8 @@ const loginHandler = async () => {
 <template>
     <LayoutAuth>
         <div class="text-center mb-4 mt-5">
-            <a href="/" class="navbar-brand navbar-brand-autodark">
-                <img src="/images/logo.png" height="100" alt="" />
+            <a href="/" class="navbar-brand navbar-brand-autodark p-4 bg-blue-lt rounded-circle shadow-sm">
+                <img src="/images/logo.png" height="60" alt="" />
             </a>
         </div>
         <div class="card card-md rounded">

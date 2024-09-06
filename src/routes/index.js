@@ -2,7 +2,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 //import store user
-import { useUser } from '../stores/auth'
+import { useUser } from '../stores/user'
 
 //define a routes
 const routes = [
@@ -21,6 +21,46 @@ const routes = [
         },
         name: 'dashboard',
         component: () => import( /* webpackChunkName: "home" */ '../views/dashboard/index.vue'),
+    },
+    {
+        path: '/categories',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'categories',
+        component: () => import( /* webpackChunkName: "home" */ '../views/categories/index.vue'),
+    },
+    {
+        path: '/products',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'products',
+        component: () => import( /* webpackChunkName: "home" */ '../views/products/index.vue'),
+    },
+    {
+        path: '/customers',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'customers',
+        component: () => import( /* webpackChunkName: "home" */ '../views/customers/index.vue'),
+    },
+    {
+        path: '/users',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'users',
+        component: () => import( /* webpackChunkName: "home" */ '../views/users/index.vue'),
+    },
+    {
+        path: '/transactions',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'transactions',
+        component: () => import( /* webpackChunkName: "home" */ '../views/transactions/index.vue'),
     },
 ]
 

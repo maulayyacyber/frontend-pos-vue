@@ -32,6 +32,20 @@ export const useUser = defineStore('user', {
 
             })
         },
+
+        //action "logout"
+        async logout() {
+            
+            //set state
+            this.user = {}
+            this.token = ''
+
+            //remove cookies
+            Cookies.remove('token')
+            Cookies.remove('user')
+
+        },
+
     },
     getters: {
         getUser: (state) => state.user,
