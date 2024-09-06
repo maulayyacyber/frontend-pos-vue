@@ -87,6 +87,25 @@ const fetchData = async () => {
     }
 };
 
+// Common chart options
+const commonChartOptions = {
+    fontFamily: 'inherit',
+    animations: { enabled: false },
+    dataLabels: { enabled: false },
+    grid: { strokeDashArray: 4 },
+    tooltip: { theme: 'dark' },
+    xaxis: {
+        labels: { padding: 0 },
+        tooltip: { enabled: false },
+        axisBorder: { show: false },
+        type: 'datetime',
+    },
+    yaxis: { labels: { padding: 4 } },
+    colors: ['#206bc4'], // Set the color according to your theme
+    legend: { show: false },
+};
+
+
 // Transform data and update chart
 watchEffect(() => {
 
@@ -98,6 +117,7 @@ watchEffect(() => {
         }];
 
         salesChartOptions.value = {
+            ...commonChartOptions,
             chart: {
                 type: "area",
                 height: 40.0,
@@ -118,6 +138,7 @@ watchEffect(() => {
         }];
 
         profitsChartOptions.value = {
+            ...commonChartOptions,
             chart: {
                 type: "bar",
                 height: 40.0,
