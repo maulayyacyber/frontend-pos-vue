@@ -188,7 +188,7 @@ const logoutHandler = () => {
                   <span className="nav-link-title"> REPORT </span>
                 </a>
                 <div className="dropdown-menu">
-                  <a className="dropdown-item" to="/sales"> Sales </a>
+                  <router-link className="dropdown-item" to="/sales"> Sales </router-link>
                   <a className="dropdown-item" to="/profits"> Profits </a>
                 </div>
               </li>

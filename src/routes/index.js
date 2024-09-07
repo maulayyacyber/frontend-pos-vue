@@ -70,6 +70,14 @@ const routes = [
         name: 'transactions.print',
         component: () => import( /* webpackChunkName: "home" */ '../views/transactions/print/print.vue'),
     },
+    {
+        path: '/sales',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'sales',
+        component: () => import( /* webpackChunkName: "home" */ '../views/sales/index.vue'),
+    }
 
 ]
 
