@@ -77,6 +77,14 @@ const routes = [
         },
         name: 'sales',
         component: () => import( /* webpackChunkName: "home" */ '../views/sales/index.vue'),
+    },
+    {
+        path: '/profits',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'profits',
+        component: () => import( /* webpackChunkName: "home" */ '../views/profits/index.vue'),
     }
 
 ]

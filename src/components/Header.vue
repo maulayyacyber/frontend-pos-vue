@@ -35,7 +35,7 @@ const logoutHandler = () => {
   userStore.logout();
   
   // Redirect to login page
-  router.push("/", { replace: true });
+  return router.push("/", { replace: true });
 };
 </script>
 
@@ -189,7 +189,7 @@ const logoutHandler = () => {
                 </a>
                 <div className="dropdown-menu">
                   <router-link className="dropdown-item" to="/sales"> Sales </router-link>
-                  <a className="dropdown-item" to="/profits"> Profits </a>
+                  <router-link className="dropdown-item" to="/profits"> Profits </router-link>
                 </div>
               </li>
               <li :class="['nav-item', { active: isActive('/users') }]">
