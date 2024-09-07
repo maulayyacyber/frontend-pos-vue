@@ -81,6 +81,7 @@ const handleKeyDown = (e) => {
         searchHandler();
     }
 };
+
 </script>
 
 <template>

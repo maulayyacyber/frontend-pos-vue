@@ -62,6 +62,15 @@ const routes = [
         name: 'transactions',
         component: () => import( /* webpackChunkName: "home" */ '../views/transactions/index.vue'),
     },
+    {
+        path: '/transactions/print',
+        beforeEnter: (to, from, next) => {
+            useUser().getToken ? next() : next('/')
+        },
+        name: 'transactions.print',
+        component: () => import( /* webpackChunkName: "home" */ '../views/transactions/print/print.vue'),
+    },
+
 ]
 
 //create router
